@@ -1,24 +1,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class SMNode : MonoBehaviour
 {
-    [SerializeField] private string nodeName = "Node";
     [SerializeField] private TextMeshPro nameText;
 
     [HideInInspector] public List<SMTransition> transitions = new();    
     
     [SerializeField] GameObject transitionPrefab;
-    
-    private void Start()
-    {
-        nameText.text = nodeName;
-    }
 
+    private SMAnimation _nodeAnimation;
+    public SMAnimation NodeAnimation
+    {
+        get => _nodeAnimation;
+        set
+        {
+            _nodeAnimation = value;
+            nameText.text = _nodeAnimation.name;
+        }
+    }
+    
     private void OnMouseOver()
     {
         SMHandler.Instance.NodeHovering = this;
@@ -44,16 +47,21 @@ public class SMNode : MonoBehaviour
             SMNode from = SMHandler.Instance.NodeTransitionStart;
             SMNode to = this;
 
-            if (transitions.Any(x => x.From == from && x.To == to)) return;
-
-            var trans = Instantiate(transitionPrefab).GetComponent<SMTransition>();
-            trans.From = from;
-            trans.To = to;
-            
-            bool alreadyTransitionOtherWay = transitions.Any(x => x.From == to && x.To == from);
-            trans.IsOffset = alreadyTransitionOtherWay;
-
-            from.transitions.Add(trans);
+            MakeTransition(from, to);
         }
+    }
+
+    public void MakeTransition(SMNode from, SMNode to)
+    {
+        if (transitions.Any(x => x.From == from && x.To == to)) return;
+
+        var trans = Instantiate(transitionPrefab).GetComponent<SMTransition>();
+        trans.From = from;
+        trans.To = to;
+            
+        bool alreadyTransitionOtherWay = transitions.Any(x => x.From == to && x.To == from);
+        trans.IsOffset = alreadyTransitionOtherWay;
+
+        from.transitions.Add(trans);
     }
 }
