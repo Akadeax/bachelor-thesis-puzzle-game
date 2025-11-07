@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SMLevel1
   m_EditorClassIdentifier: 
   blackboardFields:
-  - name: IsWalking
+  - name: Is Walking
     value: 0
   animations:
   - name: Idle
@@ -35,5 +35,3 @@ MonoBehaviour:
   initialTransitions:
   - from: Idle
     to: Walk
-  - from: Walk
-    to: Idle

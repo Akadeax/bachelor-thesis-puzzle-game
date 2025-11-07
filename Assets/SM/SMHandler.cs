@@ -22,7 +22,7 @@ public class SMHandler : MonoBehaviour
     public SMNode NodeTransitionStart { get; set; }
 
 
-    public SMBlackboard Blackboard { get; set; }
+    public SMBlackboard Blackboard { get; set; } = new SMBlackboard();
     public List<SMAnimation> Animations { get; set; }
 
 
@@ -57,6 +57,11 @@ public class SMHandler : MonoBehaviour
             var to = Nodes.First(x => x.NodeAnimation.name == trans.to);
             
             from.MakeTransition(from, to);
+        }
+
+        foreach (SMBlackboardField field in smLevelData.blackboardFields)
+        {
+            Blackboard.Fields.Add(field);
         }
     }
 
