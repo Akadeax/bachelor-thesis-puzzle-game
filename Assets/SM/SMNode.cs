@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class SMNode : MonoBehaviour
     
     [SerializeField] GameObject transitionPrefab;
 
+    private SpriteRenderer _spriteRenderer;
     private SMAnimation _nodeAnimation;
     public SMAnimation NodeAnimation
     {
@@ -22,7 +24,13 @@ public class SMNode : MonoBehaviour
             nameText.text = _nodeAnimation.name;
         }
     }
-    
+
+    private void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _spriteRenderer.color = Color.white;
+    }
+
     private void OnMouseOver()
     {
         SMHandler.Instance.NodeHovering = this;
@@ -52,9 +60,9 @@ public class SMNode : MonoBehaviour
         }
     }
 
-    public void MakeTransition(SMNode from, SMNode to)
+    public SMTransition MakeTransition(SMNode from, SMNode to)
     {
-        if (transitions.Any(x => x.From == from && x.To == to)) return;
+        if (from.transitions.Any(x => x.From == from && x.To == to)) return null;
 
         var trans = Instantiate(transitionPrefab).GetComponent<SMTransition>();
         trans.From = from;
@@ -64,5 +72,17 @@ public class SMNode : MonoBehaviour
         trans.IsOffset = alreadyTransitionOtherWay;
 
         from.transitions.Add(trans);
+
+        return trans;
+    }
+
+    public void ActivateNode()
+    {
+        _spriteRenderer.color = Color.cyan;
+    }
+
+    public void DeactivateNode()
+    {
+        _spriteRenderer.color = Color.white;
     }
 }

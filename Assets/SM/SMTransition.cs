@@ -95,4 +95,21 @@ public class SMTransition : MonoBehaviour
 
         _edgeCollider.SetPoints(edges);
     }
+
+    public void MarkAsUsed()
+    {
+        StartCoroutine(_MarkAsUsed());
+    }
+
+    IEnumerator _MarkAsUsed()
+    {
+        if (!_lineRenderer) yield break;
+        
+        _lineRenderer.startColor = Color.red;
+        _lineRenderer.endColor = Color.red;
+        yield return new WaitForSeconds(0.2f);
+        
+        _lineRenderer.startColor = Color.white;
+        _lineRenderer.endColor = Color.white;
+    }
 }

@@ -8,7 +8,8 @@ using UnityEngine;
 public class SMFieldText : MonoBehaviour
 {
     private TextMeshPro _text;
-
+    private SMTransition _trans;
+    
     [CanBeNull]
     SMBlackboardField _selectedOption;
     [CanBeNull]
@@ -20,16 +21,21 @@ public class SMFieldText : MonoBehaviour
             _selectedOption = value;
             _text.text = value?.name ?? "None";
             
-            SMTransition transition = transform.parent.parent.GetComponent<SMTransition>();
-            transition.associatedField = value;
+            _trans.associatedField = value;
         }
     }
 
     private void Awake()
     {
+        _trans = transform.parent.parent.GetComponent<SMTransition>();
+        
         _text = GetComponent<TextMeshPro>();
         _text.color = Color.white;
-        SelectedOption = null;
+    }
+
+    private void Start()
+    {
+        SelectedOption = _trans.associatedField;
     }
 
     private void OnMouseEnter()
@@ -44,7 +50,7 @@ public class SMFieldText : MonoBehaviour
 
     private void OnMouseDown()
     {
-        var allFields = SMHandler.Instance.Blackboard.Fields;
+        var allFields = SMHandler.Instance.Blackboard.fields;
 
         if (SelectedOption == null)
         {
@@ -60,5 +66,10 @@ public class SMFieldText : MonoBehaviour
         }
         
         SelectedOption = allFields[index + 1];
+    }
+
+    private void Update()
+    {
+
     }
 }

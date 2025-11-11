@@ -7,7 +7,8 @@ using UnityEngine.Assertions;
 public class SMHandler : MonoBehaviour
 {
     [SerializeField] private GameObject smNodePrefab;
-    [SerializeField] private SMLevelData smLevelData;
+    [SerializeField] private GameObject fieldDisplayPrefab;
+    [SerializeField] public SMLevelData smLevelData;
     [SerializeField] private GameObject sceneNodeStartPoint;
     
     private Camera _camera;
@@ -35,6 +36,7 @@ public class SMHandler : MonoBehaviour
         {
             Instance = this;
             _camera = Camera.main;
+            InitData();
         }
         else
         {
@@ -44,6 +46,21 @@ public class SMHandler : MonoBehaviour
 
     private void Start()
     {
+        float height = 0f;
+        foreach (var field in Blackboard.fields)
+        {
+            var display = Instantiate(fieldDisplayPrefab).GetComponent<SMFieldDisplay>();
+            var pos = transform.position;
+            pos.y += height;
+            height -= 1f;
+            
+            display.transform.position = pos;
+            display.Field = field;
+        }
+    }
+
+    private void InitData()
+    {
         // Spawn initial animations and transitions
         foreach (SMInitialNode initialNode in smLevelData.initialAnimations)
         {
@@ -51,18 +68,21 @@ public class SMHandler : MonoBehaviour
             node.transform.position += new Vector3(initialNode.offset.x, initialNode.offset.y, 0);
         }
 
+        foreach (SMBlackboardField field in smLevelData.blackboardFields)
+        {
+            Blackboard.fields.Add(field);
+        }
+        
         foreach (SMInitialTransition trans in smLevelData.initialTransitions)
         {
             var from = Nodes.First(x => x.NodeAnimation.name == trans.from);
             var to = Nodes.First(x => x.NodeAnimation.name == trans.to);
             
-            from.MakeTransition(from, to);
+            SMTransition newTrans = from.MakeTransition(from, to);
+            newTrans.associatedField = Blackboard.GetField(trans.field);
+            newTrans.associatedValue = trans.value;
         }
 
-        foreach (SMBlackboardField field in smLevelData.blackboardFields)
-        {
-            Blackboard.Fields.Add(field);
-        }
     }
 
 

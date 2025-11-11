@@ -8,7 +8,8 @@ using UnityEngine;
 public class SMValueText : MonoBehaviour
 {
     private TextMeshPro _text;
-
+    private SMTransition _trans;
+    
     bool _selectedOption;
     private bool SelectedOption
     {
@@ -16,18 +17,23 @@ public class SMValueText : MonoBehaviour
         set
         {
             _selectedOption = value;
-            _text.text = value ? "yes" : "no";
+            _text.text = value ? "<color=#00FF00>yes</color>" : "<color=#FF0000>no</color>";
             
-            SMTransition transition = transform.parent.parent.GetComponent<SMTransition>();
-            transition.associatedValue = value;
+            _trans.associatedValue = value;
         }
     }
 
     private void Awake()
     {
+        _trans = transform.parent.parent.GetComponent<SMTransition>();
         _text = GetComponent<TextMeshPro>();
         _text.color = Color.white;
-        SelectedOption = false;
+        
+    }
+    
+    private void Start()
+    {
+        SelectedOption = _trans.associatedValue;
     }
 
     private void OnMouseEnter()

@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 public class SMInitialTransition
 {
     public string from, to;
+    public string field;
+    public bool value;
 }
 
 [System.Serializable]
@@ -20,6 +22,8 @@ public class SMInitialNode
 [CreateAssetMenu(fileName = "SMLevel", menuName = "SM Level Data")]
 public class SMLevelData : ScriptableObject
 {
+    public int playerBehaviorIndex = 1;
+    
     public List<SMBlackboardField> blackboardFields = new();
     public List<SMAnimation> animations = new();
 
