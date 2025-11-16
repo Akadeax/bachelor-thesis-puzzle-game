@@ -5,15 +5,15 @@ using UnityEngine;
 public class SMPlayerAnimator : MonoBehaviour
 {
     // TODO: Level transition system, probably with a DontDestroyOnLoad handler?
-    
+
     private SpriteRenderer _spriteRenderer;
-    
+
     [CanBeNull] private SMNode _currentNode;
     [CanBeNull] private SMAnimation CurrentAnimation => _currentNode?.NodeAnimation;
-    
+
     private float _animTimeInState;
     private int _frame;
-    
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -29,11 +29,12 @@ public class SMPlayerAnimator : MonoBehaviour
             1 => PlayerBehaviorLevel1(),
             _ => null
         };
-        
+
         StartCoroutine(coroutine);
     }
 
     #region BEHAVIOR
+
     IEnumerator PlayerBehaviorLevel1()
     {
         while (true)
@@ -65,8 +66,10 @@ public class SMPlayerAnimator : MonoBehaviour
             yield return null;
             transform.Translate(Vector3.right * (dir * speed * Time.deltaTime));
         }
+
         SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
     }
+
     #endregion
 
     private void Update()
@@ -77,25 +80,25 @@ public class SMPlayerAnimator : MonoBehaviour
 
     private void HandleTransitions()
     {
-        foreach (var trans in _currentNode.transitions)
+        foreach (var trans in _currentNode!.transitions)
         {
             if (trans.associatedField == null) continue;
 
             bool isInCorrectState = _currentNode == trans.From;
             bool isCorrectValue = trans.associatedField.value == trans.associatedValue;
-            
+
             if (!isInCorrectState || !isCorrectValue) continue;
             TransitionState(trans.To);
             trans.MarkAsUsed();
             return;
         }
     }
-    
+
     private void DisplayCurrentFrame()
     {
         _animTimeInState += Time.deltaTime;
 
-        if (_animTimeInState >= CurrentAnimation.timeBetweenFrames)
+        if (_animTimeInState >= CurrentAnimation!.timeBetweenFrames)
         {
             _animTimeInState = 0;
             _frame++;
@@ -104,7 +107,7 @@ public class SMPlayerAnimator : MonoBehaviour
                 _frame = 0;
             }
         }
-        
+
         _spriteRenderer.sprite = CurrentAnimation.sprites[_frame];
     }
 
@@ -112,8 +115,8 @@ public class SMPlayerAnimator : MonoBehaviour
     {
         _currentNode?.DeactivateNode();
         _currentNode = newState;
-        _currentNode.ActivateNode();
-        
+        _currentNode!.ActivateNode();
+
         _animTimeInState = 0;
         _frame = 0;
     }

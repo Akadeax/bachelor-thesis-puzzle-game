@@ -8,8 +8,9 @@ public class SMHandler : MonoBehaviour
 {
     [SerializeField] private GameObject smNodePrefab;
     [SerializeField] private GameObject fieldDisplayPrefab;
-    [SerializeField] public SMLevelData smLevelData;
     [SerializeField] private GameObject sceneNodeStartPoint;
+    
+    [HideInInspector] public SMLevelData smLevelData;
     
     private Camera _camera;
     public static SMHandler Instance { get; private set; }
@@ -61,6 +62,8 @@ public class SMHandler : MonoBehaviour
 
     private void InitData()
     {
+        smLevelData = SMLevelHandler.Instance.GetCurrentLevel();
+        
         // Spawn initial animations and transitions
         foreach (SMInitialNode initialNode in smLevelData.initialAnimations)
         {
