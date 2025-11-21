@@ -912,7 +912,7 @@ GameObject:
   - component: {fileID: 5328220738887686558}
   m_Layer: 0
   m_Name: SMTransitionLine
-  m_TagString: Untagged
+  m_TagString: Element
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -1,5 +1,5 @@
-    using System;
-    using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -18,6 +18,8 @@ public class SMTransition : MonoBehaviour
     public SMNode From { get; set; }
     public SMNode To { get; set; }
 
+    public bool Interactable { get; set; } = true;
+    
     [HideInInspector] [CanBeNull] public SMBlackboardField associatedField;
     [HideInInspector] public bool associatedValue;
     
@@ -37,6 +39,8 @@ public class SMTransition : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (!Interactable) return;
+        
         _lineRenderer.startColor = Color.blue;
         _lineRenderer.endColor = Color.blue;
 
@@ -98,7 +102,19 @@ public class SMTransition : MonoBehaviour
 
     public void MarkAsUsed()
     {
+        if (!isActiveAndEnabled) return;
+        
         StartCoroutine(_MarkAsUsed());
+    }
+
+    private void OnEnable()
+    {
+        if (!_lineRenderer)
+        {
+            _lineRenderer = GetComponent<LineRenderer>();
+        }
+        _lineRenderer.startColor = Color.white;
+        _lineRenderer.endColor = Color.white;
     }
 
     IEnumerator _MarkAsUsed()

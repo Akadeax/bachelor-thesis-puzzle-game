@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class SMLevelHandler : MonoBehaviour
 {
     [SerializeField] private bool isTutorial;
+    [SerializeField] private SMLevelData tutorialLevelData;
     public bool IsTutorial => isTutorial;
     
     #region SINGLETON
@@ -41,18 +42,24 @@ public class SMLevelHandler : MonoBehaviour
 
     public SMLevelData GetCurrentLevel()
     {
-        return levels[_currentLevelIndex];
+        return isTutorial ? tutorialLevelData : levels[_currentLevelIndex];
     }
 
     public void AdvanceLevel()
     {
+        if (isTutorial)
+        {
+            SceneManager.LoadScene("SMMainScene");
+            return;
+        }
+        
         if (_currentLevelIndex == levels.Count - 1)
         {
             print("WIN!");
             return;
         }
 
-        if (!isTutorial) _currentLevelIndex++;
+        _currentLevelIndex++;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

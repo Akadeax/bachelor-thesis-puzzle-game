@@ -19,8 +19,12 @@ public class SMFieldText : MonoBehaviour
         set
         {
             _selectedOption = value;
-            _text.text = value?.name ?? "None";
+            if (string.IsNullOrWhiteSpace(value?.name))
+            {
+                _text.text = "None";
+            }
             
+            _text.text = value?.name ?? "None";
             _trans.associatedField = value;
         }
     }
@@ -35,7 +39,10 @@ public class SMFieldText : MonoBehaviour
 
     private void Start()
     {
-        SelectedOption = _trans.associatedField;
+    }
+
+    private void Update()
+    {
     }
 
     private void OnMouseEnter()
@@ -66,10 +73,5 @@ public class SMFieldText : MonoBehaviour
         }
         
         SelectedOption = allFields[index + 1];
-    }
-
-    private void Update()
-    {
-
     }
 }

@@ -25,6 +25,8 @@ public class SMNode : MonoBehaviour
         }
     }
 
+    public bool Interactable { get; set; } = true;
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -33,6 +35,8 @@ public class SMNode : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (!Interactable) return;
+        
         SMHandler.Instance.NodeHovering = this;
         
         if (Input.GetMouseButtonDown(0))
@@ -78,11 +82,13 @@ public class SMNode : MonoBehaviour
 
     public void ActivateNode()
     {
+        if (!_spriteRenderer) return;
         _spriteRenderer.color = Color.cyan;
     }
 
     public void DeactivateNode()
     {
+        if (!_spriteRenderer) return;
         _spriteRenderer.color = Color.white;
     }
 }

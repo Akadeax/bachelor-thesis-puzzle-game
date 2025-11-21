@@ -1,5 +1,6 @@
 using System.Collections;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SMPlayerAnimator : MonoBehaviour
@@ -13,14 +14,25 @@ public class SMPlayerAnimator : MonoBehaviour
 
     private float _animTimeInState;
     private int _frame;
+    private Vector3 startPos;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        startPos = transform.position;
     }
 
     private void Start()
     {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
+        if (SMHandler.Instance.Nodes.Count == 0) return;
+        
+        StopAllCoroutines();
+        transform.position = startPos;
         TransitionState(SMHandler.Instance.Nodes[0]);
 
         // Add new behaviors here
@@ -74,6 +86,12 @@ public class SMPlayerAnimator : MonoBehaviour
 
     private void Update()
     {
+        if (SMHandler.Instance.Nodes.Count == 0)
+        {
+            Initialize();
+            return;
+            
+        }
         HandleTransitions();
         DisplayCurrentFrame();
     }

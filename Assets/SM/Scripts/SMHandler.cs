@@ -29,7 +29,11 @@ public class SMHandler : MonoBehaviour
 
 
     public List<SMNode> Nodes { get; set; } = new();
-    
+
+    public void Restart()
+    {
+        Nodes.Clear();
+    }
 
     private void Awake()
     {
@@ -64,19 +68,27 @@ public class SMHandler : MonoBehaviour
     {
         smLevelData = SMLevelHandler.Instance.GetCurrentLevel();
         
-        // Spawn initial animations and transitions
-        foreach (SMInitialNode initialNode in smLevelData.initialAnimations)
-        {
-            var node = MakeNewNode(initialNode.name);
-            node.transform.position += new Vector3(initialNode.offset.x, initialNode.offset.y, 0);
-        }
-
         foreach (SMBlackboardField field in smLevelData.blackboardFields)
         {
             Blackboard.fields.Add(field);
         }
         
-        foreach (SMInitialTransition trans in smLevelData.initialTransitions)
+        // Spawn initial animations and transitions
+        SpawnFromLevelData(smLevelData.initialAnimations, smLevelData.initialTransitions);
+    }
+
+    public void SpawnFromLevelData(List<SMInitialNode> nodes, List<SMInitialTransition> transitions)
+    {
+        foreach (var go in FindObjectsOfType<SMNode>(true)) Destroy(go.gameObject);
+        foreach (var go in FindObjectsOfType<SMTransition>(true)) Destroy(go.gameObject);
+        
+        foreach (SMInitialNode initialNode in nodes)
+        {
+            var node = MakeNewNode(initialNode.name);
+            node.transform.position += new Vector3(initialNode.offset.x, initialNode.offset.y, 0);
+        }
+        
+        foreach (SMInitialTransition trans in transitions)
         {
             var from = Nodes.First(x => x.NodeAnimation.name == trans.from);
             var to = Nodes.First(x => x.NodeAnimation.name == trans.to);
@@ -85,7 +97,6 @@ public class SMHandler : MonoBehaviour
             newTrans.associatedField = Blackboard.GetField(trans.field);
             newTrans.associatedValue = trans.value;
         }
-
     }
 
 

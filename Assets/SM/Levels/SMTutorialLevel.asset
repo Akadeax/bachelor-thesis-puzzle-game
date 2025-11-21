@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae6740a4e6e264342a85a305856ea9ac, type: 3}
+  m_Name: SMTutorialLevel
+  m_EditorClassIdentifier: 
+  playerBehaviorIndex: 1
+  blackboardFields:
+  - name: Is Walking
+    value: 0
+  animations:
+  - name: Idle
+    sprites:
+    - {fileID: 215564857, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.5
+  - name: Walk
+    sprites:
+    - {fileID: 215564857, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -333295149, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -1619653920, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -2040667540, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.25
+  initialAnimations: []
+  initialTransitions: []
