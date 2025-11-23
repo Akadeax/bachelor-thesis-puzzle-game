@@ -1,12 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class SMPlayerAnimator : MonoBehaviour
 {
-    // TODO: Level transition system, probably with a DontDestroyOnLoad handler?
-
     private SpriteRenderer _spriteRenderer;
 
     [CanBeNull] private SMNode _currentNode;
@@ -16,14 +16,18 @@ public class SMPlayerAnimator : MonoBehaviour
     private int _frame;
     private Vector3 startPos;
 
+    [HideInInspector] public int behaviorIndex = -1;
+    
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         startPos = transform.position;
+
     }
 
     private void Start()
     {
+        behaviorIndex = SMHandler.Instance.smLevelData.playerBehaviorIndex;
         Initialize();
     }
 
@@ -36,9 +40,10 @@ public class SMPlayerAnimator : MonoBehaviour
         TransitionState(SMHandler.Instance.Nodes[0]);
 
         // Add new behaviors here
-        IEnumerator coroutine = SMHandler.Instance.smLevelData.playerBehaviorIndex switch
+        IEnumerator coroutine = behaviorIndex switch
         {
-            1 => PlayerBehaviorLevel1(),
+            0 => PlayerBehaviorIdle(),
+            1 => PlayerBehaviorWalkBackForth(),
             _ => null
         };
 
@@ -47,7 +52,16 @@ public class SMPlayerAnimator : MonoBehaviour
 
     #region BEHAVIOR
 
-    IEnumerator PlayerBehaviorLevel1()
+    IEnumerator PlayerBehaviorIdle()
+    {
+        while (true)
+        {
+            yield return StartCoroutine(DoIdle(2.5f));
+        }
+        // ReSharper disable once IteratorNeverReturns
+    }
+    
+    IEnumerator PlayerBehaviorWalkBackForth()
     {
         while (true)
         {
@@ -57,6 +71,7 @@ public class SMPlayerAnimator : MonoBehaviour
             yield return StartCoroutine(DoWalk(2.5f, -1));
             yield return StartCoroutine(DoIdle(0.8f));
             yield return StartCoroutine(DoWalk(1f, 1));
+            
         }
         // ReSharper disable once IteratorNeverReturns
     }
@@ -96,6 +111,7 @@ public class SMPlayerAnimator : MonoBehaviour
         DisplayCurrentFrame();
     }
 
+    
     private void HandleTransitions()
     {
         foreach (var trans in _currentNode!.transitions)

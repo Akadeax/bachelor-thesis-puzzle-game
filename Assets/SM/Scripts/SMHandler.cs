@@ -9,9 +9,9 @@ public class SMHandler : MonoBehaviour
     [SerializeField] private GameObject smNodePrefab;
     [SerializeField] private GameObject fieldDisplayPrefab;
     [SerializeField] private GameObject sceneNodeStartPoint;
-    
+
     [HideInInspector] public SMLevelData smLevelData;
-    
+
     private Camera _camera;
     public static SMHandler Instance { get; private set; }
 
@@ -58,7 +58,7 @@ public class SMHandler : MonoBehaviour
             var pos = transform.position;
             pos.y += height;
             height -= 1f;
-            
+
             display.transform.position = pos;
             display.Field = field;
         }
@@ -67,12 +67,12 @@ public class SMHandler : MonoBehaviour
     private void InitData()
     {
         smLevelData = SMLevelHandler.Instance.GetCurrentLevel();
-        
+
         foreach (SMBlackboardField field in smLevelData.blackboardFields)
         {
             Blackboard.fields.Add(field);
         }
-        
+
         // Spawn initial animations and transitions
         SpawnFromLevelData(smLevelData.initialAnimations, smLevelData.initialTransitions);
     }
@@ -81,18 +81,18 @@ public class SMHandler : MonoBehaviour
     {
         foreach (var go in FindObjectsOfType<SMNode>(true)) Destroy(go.gameObject);
         foreach (var go in FindObjectsOfType<SMTransition>(true)) Destroy(go.gameObject);
-        
+
         foreach (SMInitialNode initialNode in nodes)
         {
             var node = MakeNewNode(initialNode.name);
             node.transform.position += new Vector3(initialNode.offset.x, initialNode.offset.y, 0);
         }
-        
+
         foreach (SMInitialTransition trans in transitions)
         {
             var from = Nodes.First(x => x.NodeAnimation.name == trans.from);
             var to = Nodes.First(x => x.NodeAnimation.name == trans.to);
-            
+
             SMTransition newTrans = from.MakeTransition(from, to);
             newTrans.associatedField = Blackboard.GetField(trans.field);
             newTrans.associatedValue = trans.value;
@@ -129,14 +129,38 @@ public class SMHandler : MonoBehaviour
     public SMNode MakeNewNode(string newAnimationName)
     {
         var node = Instantiate(smNodePrefab).GetComponent<SMNode>();
-        
+
         Assert.IsTrue(smLevelData.animations.Any(x => x.name == newAnimationName));
         node.NodeAnimation = smLevelData.animations.First(x => x.name == newAnimationName);
-        
-        node.transform.position = new Vector3(sceneNodeStartPoint.transform.position.x, sceneNodeStartPoint.transform.position.y, 0);
-        
+
+        node.transform.position = new Vector3(sceneNodeStartPoint.transform.position.x,
+            sceneNodeStartPoint.transform.position.y, 0);
+
         Nodes.Add(node);
-        
+
         return node;
+    }
+
+    public bool CheckSolution()
+    {
+        List<SMTransition> transitions = new();
+        foreach (var node in Nodes)
+        {
+            transitions.AddRange(node.transitions);
+        }
+
+        foreach (SMInitialTransition correctTrans in smLevelData.correctTransitions)
+        {
+            bool correct = transitions.Any(x => x.From.NodeAnimation.name == correctTrans.from &&
+                                                x.To.NodeAnimation.name == correctTrans.to &&
+                                                x.associatedField?.name == correctTrans.field &&
+                                                x.associatedValue == correctTrans.value);
+
+            if (correct) continue;
+
+            return false;
+        }
+
+        return true;
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SMNode : MonoBehaviour
 {
@@ -71,7 +72,9 @@ public class SMNode : MonoBehaviour
         var trans = Instantiate(transitionPrefab).GetComponent<SMTransition>();
         trans.From = from;
         trans.To = to;
-            
+        trans.associatedField = null;
+        trans.associatedValue = false;
+        
         bool alreadyTransitionOtherWay = transitions.Any(x => x.From == to && x.To == from);
         trans.IsOffset = alreadyTransitionOtherWay;
 

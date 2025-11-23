@@ -349,6 +349,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isTutorial: 1
   tutorialLevelData: {fileID: 11400000, guid: e3c9b27570b3f134e848958ba9e5c41f, type: 2}
+  winOverlay: {fileID: 0}
+  wrongOverlay: {fileID: 0}
+  finalWinOverlay: {fileID: 0}
   levels:
   - {fileID: 11400000, guid: f7a70feae12579f418f3486cb340ba93, type: 2}
 --- !u!4 &359199736
@@ -1048,6 +1051,7 @@ MonoBehaviour:
     nodesVisible: 0
     blackboardVisible: 0
     transitionsVisible: 0
+    playerBehaviorIndex: 0
     keepPreviousElements: 0
     nodes:
     - name: Idle
@@ -1069,10 +1073,11 @@ MonoBehaviour:
     nodesVisible: 1
     blackboardVisible: 0
     transitionsVisible: 0
+    playerBehaviorIndex: 1
     keepPreviousElements: 0
     nodes:
     - name: Idle
-      offset: {x: 0, y: 2}
+      offset: {x: 0, y: 0}
     transitions: []
 --- !u!4 &1333318629
 Transform:

@@ -29,4 +29,6 @@ public class SMLevelData : ScriptableObject
 
     public List<SMInitialNode> initialAnimations = new();
     public List<SMInitialTransition> initialTransitions = new();
+
+    public List<SMInitialTransition> correctTransitions = new();
 }

@@ -22,7 +22,6 @@ MonoBehaviour:
   - name: Idle
     sprites:
     - {fileID: 215564857, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
-    - {fileID: -1159729286, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
     timeBetweenFrames: 0.5
   - name: Walk
     sprites:
@@ -45,3 +44,4 @@ MonoBehaviour:
     to: Idle
     field: Is Walking
     value: 0
+  correctTransitions: []

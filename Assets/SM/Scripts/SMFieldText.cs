@@ -39,10 +39,7 @@ public class SMFieldText : MonoBehaviour
 
     private void Start()
     {
-    }
-
-    private void Update()
-    {
+        SelectedOption = _trans.associatedField;
     }
 
     private void OnMouseEnter()

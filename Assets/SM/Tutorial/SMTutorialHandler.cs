@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -19,6 +19,7 @@ public class SMTutorialStep
     public bool nodesVisible;
     public bool blackboardVisible;
     public bool transitionsVisible;
+    public int playerBehaviorIndex;
 
     [Header("Elements")]
     public bool keepPreviousElements = true;
@@ -57,7 +58,11 @@ public class SMTutorialHandler : MonoBehaviour
 
     public void EnterNextStep()
     {
-        if (currentStepIndex == steps.Count - 1) return;
+        if (currentStepIndex == steps.Count - 1)
+        {
+            SceneManager.LoadScene("SMMainScene");
+            return;
+        }
         
         currentStepIndex++;
         InitializeCurrentStep();
@@ -79,6 +84,7 @@ public class SMTutorialHandler : MonoBehaviour
         {
             SMHandler.Instance.Restart();
             SMHandler.Instance.SpawnFromLevelData(CurrentStep.nodes, CurrentStep.transitions);
+            FindObjectOfType<SMPlayerAnimator>().behaviorIndex = CurrentStep.playerBehaviorIndex;
             FindObjectOfType<SMPlayerAnimator>().Initialize();
         }
         
