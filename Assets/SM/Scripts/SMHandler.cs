@@ -51,6 +51,18 @@ public class SMHandler : MonoBehaviour
 
     private void Start()
     {
+
+    }
+
+    private void InitData()
+    {
+        smLevelData = SMLevelHandler.Instance.GetCurrentLevel();
+
+        foreach (SMBlackboardField field in smLevelData.blackboardFields)
+        {
+            Blackboard.fields.Add(field);
+        }
+        
         float height = 0f;
         foreach (var field in Blackboard.fields)
         {
@@ -61,16 +73,6 @@ public class SMHandler : MonoBehaviour
 
             display.transform.position = pos;
             display.Field = field;
-        }
-    }
-
-    private void InitData()
-    {
-        smLevelData = SMLevelHandler.Instance.GetCurrentLevel();
-
-        foreach (SMBlackboardField field in smLevelData.blackboardFields)
-        {
-            Blackboard.fields.Add(field);
         }
 
         // Spawn initial animations and transitions

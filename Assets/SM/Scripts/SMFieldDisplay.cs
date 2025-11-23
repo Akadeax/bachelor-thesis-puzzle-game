@@ -13,7 +13,7 @@ public class SMFieldDisplay : MonoBehaviour
     {
         _text = GetComponent<TextMeshPro>();
         
-        if (!SMTutorialHandler.IsInTutorial) return;
+        if (SMTutorialHandler.Instance == null) return;
         gameObject.SetActive(SMTutorialHandler.Instance.CurrentStep?.blackboardVisible ?? true);
     }
 
