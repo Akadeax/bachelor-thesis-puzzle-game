@@ -49,5 +49,6 @@ public class SMValueText : MonoBehaviour
     private void OnMouseDown()
     {
         SelectedOption = !SelectedOption;
+        SMLevelHandler.Instance.CurrentTrackedEdits++;
     }
 }

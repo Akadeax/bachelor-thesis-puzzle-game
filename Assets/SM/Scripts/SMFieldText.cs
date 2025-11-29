@@ -70,5 +70,6 @@ public class SMFieldText : MonoBehaviour
         }
         
         SelectedOption = allFields[index + 1];
+        SMLevelHandler.Instance.CurrentTrackedEdits++;
     }
 }

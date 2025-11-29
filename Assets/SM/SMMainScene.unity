@@ -310,9 +310,9 @@ MonoBehaviour:
   m_text: 'You finished! A website for a survey will open in a few seconds.
 
     If
-    it doesn''t open, go to:
+    it doesn''t open, open in your browser:
 
-    google.com'
+    https://bit.ly/grad-fsm'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

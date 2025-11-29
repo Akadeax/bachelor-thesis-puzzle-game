@@ -62,6 +62,7 @@ public class SMNode : MonoBehaviour
             SMNode to = this;
 
             MakeTransition(from, to);
+            SMLevelHandler.Instance.CurrentTrackedEdits++;
         }
     }
 

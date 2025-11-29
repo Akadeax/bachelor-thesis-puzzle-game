@@ -29,5 +29,6 @@ public class SMFieldDeleteButton : MonoBehaviour
         var transition = transform.parent.parent.GetComponent<SMTransition>();
         transition.From.transitions.Remove(transition);
         Destroy(transition.gameObject);
+        SMLevelHandler.Instance.CurrentTrackedEdits++;
     }
 }

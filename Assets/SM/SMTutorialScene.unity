@@ -1045,13 +1045,34 @@ MonoBehaviour:
   darkBackground: {fileID: 1622586422}
   displayText: {fileID: 52308595}
   steps:
-  - displayedText: yes hello
+  - displayedText: Let's think about animation in video games for a second.
+    interactable: 0
+    darkBackground: 1
+    nodesVisible: 0
+    blackboardVisible: 0
+    transitionsVisible: 0
+    playerBehaviorIndex: 0
+    keepPreviousElements: 0
+    nodes: []
+    transitions: []
+  - displayedText: Look at the character in the bottom right here; he's a character
+      similar to Mario from the original Super Mario Bros.
     interactable: 0
     darkBackground: 0
     nodesVisible: 0
     blackboardVisible: 0
     transitionsVisible: 0
     playerBehaviorIndex: 0
+    keepPreviousElements: 0
+    nodes: []
+    transitions: []
+  - displayedText: As you can see, he starts walking around after a little bit.
+    interactable: 0
+    darkBackground: 0
+    nodesVisible: 0
+    blackboardVisible: 0
+    transitionsVisible: 0
+    playerBehaviorIndex: 1
     keepPreviousElements: 0
     nodes:
     - name: Idle
@@ -1067,18 +1088,28 @@ MonoBehaviour:
       to: Idle
       field: Is Walking
       value: 0
-  - displayedText: that's just how life goes sometimes
-    interactable: 1
+  - displayedText: 'When he walks around, '
+    interactable: 0
     darkBackground: 0
-    nodesVisible: 1
+    nodesVisible: 0
     blackboardVisible: 0
     transitionsVisible: 0
     playerBehaviorIndex: 1
     keepPreviousElements: 0
     nodes:
     - name: Idle
-      offset: {x: 0, y: 0}
-    transitions: []
+      offset: {x: -1, y: 0}
+    - name: Walk
+      offset: {x: 1, y: 0}
+    transitions:
+    - from: Idle
+      to: Walk
+      field: Is Walking
+      value: 1
+    - from: Walk
+      to: Idle
+      field: Is Walking
+      value: 0
 --- !u!4 &1333318629
 Transform:
   m_ObjectHideFlags: 0
