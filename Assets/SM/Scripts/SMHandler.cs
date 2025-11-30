@@ -151,18 +151,26 @@ public class SMHandler : MonoBehaviour
             transitions.AddRange(node.transitions);
         }
 
-        foreach (SMInitialTransition correctTrans in smLevelData.correctTransitions)
+        foreach (SMSolution solution in smLevelData.solutions)
         {
-            bool correct = transitions.Any(x => x.From.NodeAnimation.name == correctTrans.from &&
-                                                x.To.NodeAnimation.name == correctTrans.to &&
-                                                x.associatedField?.name == correctTrans.field &&
-                                                x.associatedValue == correctTrans.value);
+            if (solution.solutionTransitions.Count != transitions.Count) continue;
+            
+            bool thisSolutionCorrect = true;
+            foreach (SMInitialTransition correctTrans in solution.solutionTransitions)
+            {
+                bool correct = transitions.Any(x => x.From.NodeAnimation.name == correctTrans.from &&
+                                                    x.To.NodeAnimation.name == correctTrans.to &&
+                                                    x.associatedField?.name == correctTrans.field &&
+                                                    x.associatedValue == correctTrans.value);
 
-            if (correct) continue;
+                if (correct) continue;
+                thisSolutionCorrect = false;
+            }
 
-            return false;
+            if (thisSolutionCorrect) return true;
         }
+        
 
-        return true;
+        return false;
     }
 }

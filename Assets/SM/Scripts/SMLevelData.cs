@@ -18,6 +18,12 @@ public class SMInitialNode
     public Vector2 offset;
 }
 
+[System.Serializable]
+public class SMSolution
+{
+    public List<SMInitialTransition> solutionTransitions;
+}
+
 
 [CreateAssetMenu(fileName = "SMLevel", menuName = "SM Level Data")]
 public class SMLevelData : ScriptableObject
@@ -30,5 +36,5 @@ public class SMLevelData : ScriptableObject
     public List<SMInitialNode> initialAnimations = new();
     public List<SMInitialTransition> initialTransitions = new();
 
-    public List<SMInitialTransition> correctTransitions = new();
+    public List<SMSolution> solutions = new();
 }

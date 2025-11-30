@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6740a4e6e264342a85a305856ea9ac, type: 3}
   m_Name: SMLevel1
   m_EditorClassIdentifier: 
-  playerBehaviorIndex: 1
+  playerBehaviorIndex: 2
   blackboardFields:
   - name: Is Walking
-    value: 0
+    value: 1
+  - name: Is Running
+    value: 1
   animations:
   - name: Idle
     sprites:
@@ -28,18 +30,52 @@ MonoBehaviour:
     - {fileID: -1619653920, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
     - {fileID: -2040667540, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
     timeBetweenFrames: 0.25
+  - name: Run
+    sprites:
+    - {fileID: -333295149, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -1619653920, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -2040667540, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.12
   initialAnimations:
   - name: Idle
     offset: {x: 0, y: 0}
   - name: Walk
     offset: {x: 5, y: 0}
+  - name: Run
+    offset: {x: 2.5, y: -4}
   initialTransitions: []
-  correctTransitions:
-  - from: Idle
-    to: Walk
-    field: Is Walking
-    value: 1
-  - from: Walk
-    to: Idle
-    field: Is Walking
-    value: 0
+  solutions:
+  - solutionTransitions:
+    - from: Idle
+      to: Walk
+      field: Is Walking
+      value: 1
+    - from: Walk
+      to: Idle
+      field: Is Walking
+      value: 0
+    - from: Walk
+      to: Run
+      field: Is Running
+      value: 1
+    - from: Run
+      to: Walk
+      field: Is Running
+      value: 0
+  - solutionTransitions:
+    - from: Idle
+      to: Walk
+      field: Is Walking
+      value: 1
+    - from: Walk
+      to: Idle
+      field: Is Walking
+      value: 0
+    - from: Walk
+      to: Run
+      field: Is Running
+      value: 1
+    - from: Run
+      to: Idle
+      field: Is Running
+      value: 0

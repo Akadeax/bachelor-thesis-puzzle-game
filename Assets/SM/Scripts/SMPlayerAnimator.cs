@@ -33,21 +33,23 @@ public class SMPlayerAnimator : MonoBehaviour
 
     public void Initialize()
     {
-        if (SMHandler.Instance.Nodes.Count == 0) return;
         
         StopAllCoroutines();
         transform.position = startPos;
-        TransitionState(SMHandler.Instance.Nodes[0]);
 
         // Add new behaviors here
         IEnumerator coroutine = behaviorIndex switch
         {
             0 => PlayerBehaviorIdle(),
             1 => PlayerBehaviorWalkBackForth(),
+            2 => PlayerBehaviorRunBackForth(),
             _ => null
         };
-
         StartCoroutine(coroutine);
+
+        if (SMHandler.Instance.Nodes.Count == 0) return;
+        
+        TransitionState(SMHandler.Instance.Nodes[0]);
     }
 
     #region BEHAVIOR
@@ -75,6 +77,24 @@ public class SMPlayerAnimator : MonoBehaviour
         }
         // ReSharper disable once IteratorNeverReturns
     }
+    
+    IEnumerator PlayerBehaviorRunBackForth()
+    {
+        while (true)
+        {
+            yield return StartCoroutine(DoIdle(1f));
+            yield return StartCoroutine(DoWalk(1.5f, 1));
+            yield return StartCoroutine(DoIdle(1f));
+            yield return StartCoroutine(DoRun(1.5f, -1));
+            yield return StartCoroutine(DoIdle(1.8f));
+            yield return StartCoroutine(DoWalk(1.5f, 1));
+            yield return StartCoroutine(DoRun(0.75f, 1));
+            yield return StartCoroutine(DoIdle(0.3f));
+            yield return StartCoroutine(DoWalk(1.5f, -1));
+            
+        }
+        // ReSharper disable once IteratorNeverReturns
+    }
 
     private IEnumerator DoIdle(float time)
     {
@@ -94,6 +114,23 @@ public class SMPlayerAnimator : MonoBehaviour
             transform.Translate(Vector3.right * (dir * speed * Time.deltaTime));
         }
 
+        SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
+    }
+    
+    private IEnumerator DoRun(float time, int dir, float speed = 3f)
+    {
+        _spriteRenderer.flipX = dir == -1;
+        SMHandler.Instance.Blackboard.GetField("Is Running").value = true;
+        SMHandler.Instance.Blackboard.GetField("Is Walking").value = true;
+        float timer = 0f;
+        while (timer < time)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+            transform.Translate(Vector3.right * (dir * speed * Time.deltaTime));
+        }
+
+        SMHandler.Instance.Blackboard.GetField("Is Running").value = false;
         SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
     }
 

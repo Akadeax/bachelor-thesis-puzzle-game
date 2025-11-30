@@ -42,8 +42,10 @@ public class SMTutorialHandler : MonoBehaviour
         Instance = this;
     }
 
+    private GameObject _blackboard;
     private void Start()
     {
+        _blackboard = GameObject.Find("Blackboard");
         EnterNextStep();
     }
 
@@ -79,6 +81,8 @@ public class SMTutorialHandler : MonoBehaviour
     public void InitializeCurrentStep()
     {
         Assert.IsNotNull(CurrentStep);
+        
+        _blackboard.SetActive(CurrentStep.blackboardVisible);
         
         if (!CurrentStep.keepPreviousElements)
         {

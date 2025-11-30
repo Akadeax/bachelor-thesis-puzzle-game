@@ -74,8 +74,8 @@ public class SMTransition : MonoBehaviour
         menu.position = menuPos;
         
         // Set transition points in renderer
-        from += cross * centerOffsetDist;
-        to += cross * centerOffsetDist;
+        from -= cross * centerOffsetDist;
+        to -= cross * centerOffsetDist;
 
         Vector3 dir = to - from;
         dir.z = 0;
