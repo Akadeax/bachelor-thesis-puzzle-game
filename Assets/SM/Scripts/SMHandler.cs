@@ -49,11 +49,6 @@ public class SMHandler : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-
-    }
-
     private void InitData()
     {
         smLevelData = SMLevelHandler.Instance.GetCurrentLevel();

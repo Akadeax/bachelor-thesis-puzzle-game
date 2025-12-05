@@ -43,6 +43,8 @@ public class SMPlayerAnimator : MonoBehaviour
             0 => PlayerBehaviorIdle(),
             1 => PlayerBehaviorWalkBackForth(),
             2 => PlayerBehaviorRunBackForth(),
+            3 => PlayerBehaviorRunBackForthJump(),
+            4 => PlayerBehaviorRunBackForthJumpPunch(),
             _ => null
         };
         StartCoroutine(coroutine);
@@ -95,6 +97,60 @@ public class SMPlayerAnimator : MonoBehaviour
         }
         // ReSharper disable once IteratorNeverReturns
     }
+    
+    IEnumerator PlayerBehaviorRunBackForthJump()
+    {
+        while (true)
+        {
+            yield return StartCoroutine(DoIdle(1f));
+            yield return StartCoroutine(DoWalk(1.5f, 1));
+            yield return StartCoroutine(DoIdle(1f));
+            yield return StartCoroutine(DoJump());
+            yield return StartCoroutine(DoIdle(0.3f));
+            yield return StartCoroutine(DoRun(0.5f, -1));
+            StartCoroutine(DoJump());
+            yield return StartCoroutine(DoRun(1.0f, -1));
+            yield return StartCoroutine(DoIdle(1.8f));
+            yield return StartCoroutine(DoWalk(1.5f, 1));
+            yield return StartCoroutine(DoRun(0.75f, 1));
+            yield return StartCoroutine(DoIdle(0.3f));
+            yield return StartCoroutine(DoWalk(0.2f, -1));
+            StartCoroutine(DoJump());
+            yield return StartCoroutine(DoWalk(1.3f, -1));
+            
+        }
+        // ReSharper disable once IteratorNeverReturns
+    }
+    
+    IEnumerator PlayerBehaviorRunBackForthJumpPunch()
+    {
+        while (true)
+        {
+            yield return StartCoroutine(DoIdle(1f));
+            yield return StartCoroutine(DoPunch());
+            yield return StartCoroutine(DoIdle(0.5f));
+            yield return StartCoroutine(DoWalk(1.5f, 1));
+            yield return StartCoroutine(DoIdle(1f));
+            yield return StartCoroutine(DoJump());
+            yield return StartCoroutine(DoIdle(0.3f));
+            yield return StartCoroutine(DoRun(0.5f, -1));
+            StartCoroutine(DoJump());
+            yield return StartCoroutine(DoRun(1.0f, -1));
+            yield return StartCoroutine(DoIdle(1.8f));
+            yield return StartCoroutine(DoPunch());
+            yield return StartCoroutine(DoIdle(0.5f));
+            yield return StartCoroutine(DoWalk(1.5f, 1));
+            yield return StartCoroutine(DoRun(0.75f, 1));
+            yield return StartCoroutine(DoIdle(0.3f));
+            yield return StartCoroutine(DoPunch());
+            yield return StartCoroutine(DoIdle(0.5f));
+            yield return StartCoroutine(DoWalk(0.2f, -1));
+            StartCoroutine(DoJump());
+            yield return StartCoroutine(DoWalk(1.3f, -1));
+            
+        }
+        // ReSharper disable once IteratorNeverReturns
+    }
 
     private IEnumerator DoIdle(float time)
     {
@@ -132,6 +188,36 @@ public class SMPlayerAnimator : MonoBehaviour
 
         SMHandler.Instance.Blackboard.GetField("Is Running").value = false;
         SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
+    }
+    
+    private IEnumerator DoJump(float jumpTime = 0.7f)
+    {
+        SMHandler.Instance.Blackboard.GetField("Is Jumping").value = true;
+        float timer = 0f;
+        float startingY = transform.position.y;
+        while (timer < jumpTime)
+        {
+            timer += Time.deltaTime;
+            transform.position = new Vector3(transform.position.x, startingY + JumpFunction(timer / jumpTime) * 3f, 0);
+            yield return null;
+        }
+        SMHandler.Instance.Blackboard.GetField("Is Jumping").value = false;
+        transform.position = new Vector3(transform.position.x, startingY, 0);
+    }
+
+    private static float JumpFunction(float x)
+    {
+        float inner = 2 * x - 1;
+        float outer = inner * inner * -1 + 1;
+        return outer;
+        // f(x) = -(2x - 1)^2 + 1
+    }
+    
+    private IEnumerator DoPunch(float punchTime = 0.75f)
+    {
+        SMHandler.Instance.Blackboard.GetField("Is Punching").value = true;
+        yield return new WaitForSeconds(punchTime);
+        SMHandler.Instance.Blackboard.GetField("Is Punching").value = false;
     }
 
     #endregion

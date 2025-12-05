@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd5277698febae43a273aa58d624298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuDistance: 0.5
+  menuDistance: -1.5
   centerOffsetDist: 0.2
   nodeOffsetDistMin: 0.5
   nodeOffsetDistMax: 2

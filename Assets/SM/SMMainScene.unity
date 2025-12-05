@@ -427,6 +427,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7a70feae12579f418f3486cb340ba93, type: 2}
   - {fileID: 11400000, guid: cd9c8698b823fef4db15f7c9f61b2779, type: 2}
   - {fileID: 11400000, guid: 30415a4f20415af46aec191b7dfbd446, type: 2}
+  winOverride: 0
 --- !u!4 &359199736
 Transform:
   m_ObjectHideFlags: 0
@@ -3013,8 +3014,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2010572955}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.36, y: 5.4, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -7.1689, y: 5.1898, z: 0}
+  m_LocalScale: {x: 1.054, y: 1.098, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

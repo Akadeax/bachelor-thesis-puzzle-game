@@ -44,6 +44,12 @@ public class SMLevelHandler : MonoBehaviour
     private void Update()
     {
         _currentTrackedTime += Time.deltaTime;
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            winOverride = true;
+            Check();
+        }
     }
 
     [SerializeField] List<SMLevelData> levels = new();
@@ -54,6 +60,8 @@ public class SMLevelHandler : MonoBehaviour
         return isTutorial ? tutorialLevelData : levels[_currentLevelIndex];
     }
 
+    
+    
     public void AdvanceLevel()
     {
         if (isTutorial)
@@ -83,10 +91,14 @@ public class SMLevelHandler : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    public bool winOverride = false;
+    
     public void Check()
     {
-        if (SMHandler.Instance.CheckSolution())
+        if (SMHandler.Instance.CheckSolution() || winOverride)
         {
+            winOverride = false;
+            
             if (_currentLevelIndex == levels.Count - 1)
             {
                 _trackedTimes.Add(_currentTrackedTime);
