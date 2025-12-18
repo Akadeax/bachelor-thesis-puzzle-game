@@ -20,7 +20,7 @@ public class SMTransition : MonoBehaviour
 
     public bool Interactable { get; set; } = true;
     
-    [HideInInspector] [CanBeNull] public SMBlackboardField associatedField;
+    [HideInInspector] [CanBeNull] public GBlackboardField associatedField;
     [HideInInspector] public bool associatedValue;
     
     public bool IsOffset { get; set; }

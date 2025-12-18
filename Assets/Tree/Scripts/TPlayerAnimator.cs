@@ -1,22 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class SMPlayerAnimator : MonoBehaviour
+public class TPlayerAnimator : MonoBehaviour
 {
     private SpriteRenderer _spriteRenderer;
 
-    [CanBeNull] private SMNode _currentNode;
-    [CanBeNull] private GAnimation CurrentAnimation => _currentNode?.NodeAnimation;
 
     private float _animTimeInState;
     private int _frame;
     private Vector3 startPos;
 
     [HideInInspector] public int behaviorIndex = -1;
+
+    private GAnimation currentAnimation;
+    private GAnimation lastFrameAnimation;
     
     private void Awake()
     {
@@ -27,13 +26,12 @@ public class SMPlayerAnimator : MonoBehaviour
 
     private void Start()
     {
-        behaviorIndex = SMHandler.Instance.smLevelData.playerBehaviorIndex;
+        behaviorIndex = THandler.Instance.levelData.playerBehaviorIndex;
         Initialize();
     }
 
     public void Initialize()
     {
-        
         StopAllCoroutines();
         transform.position = startPos;
 
@@ -48,10 +46,6 @@ public class SMPlayerAnimator : MonoBehaviour
             _ => null
         };
         StartCoroutine(coroutine);
-
-        if (SMHandler.Instance.Nodes.Count == 0) return;
-        
-        TransitionState(SMHandler.Instance.Nodes[0]);
     }
 
     #region BEHAVIOR
@@ -154,14 +148,14 @@ public class SMPlayerAnimator : MonoBehaviour
 
     private IEnumerator DoIdle(float time)
     {
-        SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
+        THandler.Instance.Blackboard.GetField("Is Walking").value = false;
         yield return new WaitForSeconds(time);
     }
 
     private IEnumerator DoWalk(float time, int dir, float speed = 1.5f)
     {
         _spriteRenderer.flipX = dir == -1;
-        SMHandler.Instance.Blackboard.GetField("Is Walking").value = true;
+        THandler.Instance.Blackboard.GetField("Is Walking").value = true;
         float timer = 0f;
         while (timer < time)
         {
@@ -170,14 +164,14 @@ public class SMPlayerAnimator : MonoBehaviour
             transform.Translate(Vector3.right * (dir * speed * Time.deltaTime));
         }
 
-        SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
+        THandler.Instance.Blackboard.GetField("Is Walking").value = false;
     }
     
     private IEnumerator DoRun(float time, int dir, float speed = 3f)
     {
         _spriteRenderer.flipX = dir == -1;
-        SMHandler.Instance.Blackboard.GetField("Is Running").value = true;
-        SMHandler.Instance.Blackboard.GetField("Is Walking").value = true;
+        THandler.Instance.Blackboard.GetField("Is Running").value = true;
+        THandler.Instance.Blackboard.GetField("Is Walking").value = true;
         float timer = 0f;
         while (timer < time)
         {
@@ -186,13 +180,13 @@ public class SMPlayerAnimator : MonoBehaviour
             transform.Translate(Vector3.right * (dir * speed * Time.deltaTime));
         }
 
-        SMHandler.Instance.Blackboard.GetField("Is Running").value = false;
-        SMHandler.Instance.Blackboard.GetField("Is Walking").value = false;
+        THandler.Instance.Blackboard.GetField("Is Running").value = false;
+        THandler.Instance.Blackboard.GetField("Is Walking").value = false;
     }
     
     private IEnumerator DoJump(float jumpTime = 0.7f)
     {
-        SMHandler.Instance.Blackboard.GetField("Is Jumping").value = true;
+        THandler.Instance.Blackboard.GetField("Is Jumping").value = true;
         float timer = 0f;
         float startingY = transform.position.y;
         while (timer < jumpTime)
@@ -201,7 +195,7 @@ public class SMPlayerAnimator : MonoBehaviour
             transform.position = new Vector3(transform.position.x, startingY + JumpFunction(timer / jumpTime) * 3f, 0);
             yield return null;
         }
-        SMHandler.Instance.Blackboard.GetField("Is Jumping").value = false;
+        THandler.Instance.Blackboard.GetField("Is Jumping").value = false;
         transform.position = new Vector3(transform.position.x, startingY, 0);
     }
 
@@ -215,66 +209,46 @@ public class SMPlayerAnimator : MonoBehaviour
     
     private IEnumerator DoPunch(float punchTime = 0.75f)
     {
-        SMHandler.Instance.Blackboard.GetField("Is Punching").value = true;
+        THandler.Instance.Blackboard.GetField("Is Punching").value = true;
         yield return new WaitForSeconds(punchTime);
-        SMHandler.Instance.Blackboard.GetField("Is Punching").value = false;
+        THandler.Instance.Blackboard.GetField("Is Punching").value = false;
     }
 
     #endregion
 
     private void Update()
     {
-        if (SMHandler.Instance.Nodes.Count == 0)
+        if (THandler.Instance is null || THandler.Instance.RootNode is null || THandler.Instance.RootNode.Node is null) return;
+        
+        currentAnimation = THandler.Instance.RootNode.Node.Resolve();
+        lastFrameAnimation = currentAnimation;
+
+        if (currentAnimation != lastFrameAnimation)
         {
-            Initialize();
-            return;
-            
+            _animTimeInState = 0f;
+            _frame = 0;
         }
-        HandleTransitions();
+        
         DisplayCurrentFrame();
     }
-
     
-    private void HandleTransitions()
-    {
-        foreach (var trans in _currentNode!.transitions)
-        {
-            if (trans.associatedField == null) continue;
-
-            bool isInCorrectState = _currentNode == trans.From;
-            bool isCorrectValue = trans.associatedField.value == trans.associatedValue;
-
-            if (!isInCorrectState || !isCorrectValue) continue;
-            TransitionState(trans.To);
-            trans.MarkAsUsed();
-            return;
-        }
-    }
-
     private void DisplayCurrentFrame()
     {
+        if (currentAnimation is null) return;
+        
         _animTimeInState += Time.deltaTime;
 
-        if (_animTimeInState >= CurrentAnimation!.timeBetweenFrames)
+        if (_animTimeInState >= currentAnimation.timeBetweenFrames)
         {
             _animTimeInState = 0;
             _frame++;
-            if (_frame >= CurrentAnimation.sprites.Count)
+            if (_frame >= currentAnimation.sprites.Count)
             {
                 _frame = 0;
             }
         }
 
-        _spriteRenderer.sprite = CurrentAnimation.sprites[_frame];
-    }
-
-    private void TransitionState(SMNode newState)
-    {
-        _currentNode?.DeactivateNode();
-        _currentNode = newState;
-        _currentNode!.ActivateNode();
-
-        _animTimeInState = 0;
-        _frame = 0;
+        if (_frame >= currentAnimation.sprites.Count) _frame = 0;
+        _spriteRenderer.sprite = currentAnimation.sprites[_frame];
     }
 }

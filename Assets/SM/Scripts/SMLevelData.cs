@@ -30,8 +30,8 @@ public class SMLevelData : ScriptableObject
 {
     public int playerBehaviorIndex = 1;
     
-    public List<SMBlackboardField> blackboardFields = new();
-    public List<SMAnimation> animations = new();
+    public List<GBlackboardField> blackboardFields = new();
+    public List<GAnimation> animations = new();
 
     public List<SMInitialNode> initialAnimations = new();
     public List<SMInitialTransition> initialTransitions = new();

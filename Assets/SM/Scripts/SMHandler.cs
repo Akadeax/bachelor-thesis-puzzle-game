@@ -24,8 +24,8 @@ public class SMHandler : MonoBehaviour
     public SMNode NodeTransitionStart { get; set; }
 
 
-    public SMBlackboard Blackboard { get; set; } = new SMBlackboard();
-    public List<SMAnimation> Animations { get; set; }
+    public GBlackboard Blackboard { get; set; } = new GBlackboard();
+    public List<GAnimation> Animations { get; set; }
 
 
     public List<SMNode> Nodes { get; set; } = new();
@@ -53,7 +53,7 @@ public class SMHandler : MonoBehaviour
     {
         smLevelData = SMLevelHandler.Instance.GetCurrentLevel();
 
-        foreach (SMBlackboardField field in smLevelData.blackboardFields)
+        foreach (GBlackboardField field in smLevelData.blackboardFields)
         {
             Blackboard.fields.Add(field);
         }

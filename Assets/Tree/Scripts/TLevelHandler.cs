@@ -1,46 +1,45 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SMLevelHandler : MonoBehaviour
+public class TLevelHandler : MonoBehaviour
 {
-    [SerializeField] private bool isTutorial;
-    [SerializeField] private SMLevelData tutorialLevelData;
-    [SerializeField] private GameObject winOverlay;
-    [SerializeField] private GameObject wrongOverlay;
-    [SerializeField] private GameObject finalWinOverlay;
-    public bool IsTutorial => isTutorial;
 
-    private List<float> _trackedTimes = new();
-    private List<int> _trackedEdits = new();
-
-    private float _currentTrackedTime;
-    public int CurrentTrackedEdits { get; set; } = 0;
-    
     #region SINGLETON
-
-    public static SMLevelHandler Instance { get; private set; }
+    public static TLevelHandler Instance { get; private set; }
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            if(!isTutorial) DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
     }
-
     #endregion
 
+    [SerializeField] private GameObject winOverlay;
+    [SerializeField] private GameObject wrongOverlay;
+    [SerializeField] private GameObject finalWinOverlay;
+    
+    [SerializeField] List<TLevelData> levels = new();
+    private int _currentLevelIndex;
+    
+    [HideInInspector] public bool winOverride;
+
+    private readonly List<float> _trackedTimes = new();
+    private readonly List<int> _trackedEdits = new();
+
+    private float _currentTrackedTime;
+    public int CurrentTrackedEdits { get; set; }
+    
     private void Update()
     {
         _currentTrackedTime += Time.deltaTime;
@@ -51,50 +50,20 @@ public class SMLevelHandler : MonoBehaviour
             Check();
         }
     }
-
-    [SerializeField] List<SMLevelData> levels = new();
-    private int _currentLevelIndex;
-
-    public SMLevelData GetCurrentLevel()
+    
+    public TLevelData GetCurrentLevel()
     {
-        return isTutorial ? tutorialLevelData : levels[_currentLevelIndex];
+        return levels[_currentLevelIndex];
     }
-
-
-    private void AdvanceLevel()
-    {
-        if (isTutorial)
-        {
-            SceneManager.LoadScene("SMMainScene");
-            return;
-        }
-
-        _trackedTimes.Add(_currentTrackedTime);
-        _currentTrackedTime = 0f;
-        
-        _trackedEdits.Add(CurrentTrackedEdits);
-        CurrentTrackedEdits = 0;
-        
-        if (_currentLevelIndex == levels.Count - 1)
-        {
-            print("WIN!");
-            return;
-        }
-
-        _currentLevelIndex++;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
+    
     public void ReloadLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-
-    public bool winOverride = false;
     
     public void Check()
     {
-        if (SMHandler.Instance.CheckSolution() || winOverride)
+        if (THandler.Instance.CheckSolution() || winOverride)
         {
             winOverride = false;
             
@@ -109,7 +78,7 @@ public class SMLevelHandler : MonoBehaviour
                 {
                     fileText.AppendLine($"Level {i}: {_trackedTimes[i - 1]} seconds & {_trackedEdits[i - 1]} edits");
                 }
-                File.WriteAllText($"{exeFolder}/YOUR_SM_DATA.grad", fileText.ToString());
+                File.WriteAllText($"{exeFolder}/YOUR_T_DATA.grad", fileText.ToString());
                 
                 StartCoroutine(FinalWinCoroutine());
                 return;
@@ -141,6 +110,30 @@ public class SMLevelHandler : MonoBehaviour
     {   
         finalWinOverlay.SetActive(true);
         yield return new WaitForSecondsRealtime(5f);
-        Application.OpenURL("https://bit.ly/grad-fsm");
+        Application.OpenURL("https://bit.ly/grad-t");
+    }
+
+    private void AdvanceLevel()
+    {
+        // if (isTutorial)
+        // {
+        //     SceneManager.LoadScene("SMMainScene");
+        //     return;
+        // }
+
+        _trackedTimes.Add(_currentTrackedTime);
+        _currentTrackedTime = 0f;
+        
+        _trackedEdits.Add(CurrentTrackedEdits);
+        CurrentTrackedEdits = 0;
+        
+        if (_currentLevelIndex == levels.Count - 1)
+        {
+            print("WIN!");
+            return;
+        }
+
+        _currentLevelIndex++;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

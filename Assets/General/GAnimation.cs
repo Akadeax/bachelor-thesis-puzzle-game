@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class SMAnimation
+public class GAnimation
 {
     public string name;
     public List<Sprite> sprites;

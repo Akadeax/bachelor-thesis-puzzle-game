@@ -4,17 +4,17 @@ using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
-public class SMBlackboardField
+public class GBlackboardField
 {
     public string name;
     public bool value;
 }
 
-public class SMBlackboard
+public class GBlackboard
 {
-    public readonly List<SMBlackboardField> fields = new();
+    public readonly List<GBlackboardField> fields = new();
 
-    public SMBlackboardField GetField(string name)
+    public GBlackboardField GetField(string name)
     {
         foreach (var field in fields)
         {

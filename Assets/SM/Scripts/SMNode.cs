@@ -15,8 +15,8 @@ public class SMNode : MonoBehaviour
     [SerializeField] GameObject transitionPrefab;
 
     private SpriteRenderer _spriteRenderer;
-    private SMAnimation _nodeAnimation;
-    public SMAnimation NodeAnimation
+    private GAnimation _nodeAnimation;
+    public GAnimation NodeAnimation
     {
         get => _nodeAnimation;
         set

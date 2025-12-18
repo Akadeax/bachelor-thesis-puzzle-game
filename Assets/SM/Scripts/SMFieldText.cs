@@ -11,9 +11,9 @@ public class SMFieldText : MonoBehaviour
     private SMTransition _trans;
     
     [CanBeNull]
-    SMBlackboardField _selectedOption;
+    GBlackboardField _selectedOption;
     [CanBeNull]
-    private SMBlackboardField SelectedOption
+    private GBlackboardField SelectedOption
     {
         get => _selectedOption;
         set

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class SMFieldDisplay : MonoBehaviour
+public class TFieldDisplay : MonoBehaviour
 {
     private TextMeshPro _text;
     public GBlackboardField Field { get; set; }
@@ -13,8 +13,8 @@ public class SMFieldDisplay : MonoBehaviour
     {
         _text = GetComponent<TextMeshPro>();
         
-        if (SMTutorialHandler.Instance == null) return;
-        gameObject.SetActive(SMTutorialHandler.Instance.CurrentStep?.blackboardVisible ?? true);
+        // if (SMTutorialHandler.Instance == null) return;
+        // gameObject.SetActive(SMTutorialHandler.Instance.CurrentStep?.blackboardVisible ?? true);
     }
 
     private void Update()

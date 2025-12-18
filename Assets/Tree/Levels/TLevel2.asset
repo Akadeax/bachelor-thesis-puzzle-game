@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d39db18792e084db4d2291e54e0df0, type: 3}
+  m_Name: TLevel2
+  m_EditorClassIdentifier: 
+  playerBehaviorIndex: 3
+  blackboardFields:
+  - name: Is Walking
+    value: 1
+  - name: Is Running
+    value: 1
+  - name: Is Jumping
+    value: 1
+  animations:
+  - name: Idle
+    sprites:
+    - {fileID: 215564857, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.5
+  - name: Walk
+    sprites:
+    - {fileID: -333295149, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -1619653920, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -2040667540, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.25
+  - name: Run
+    sprites:
+    - {fileID: -333295149, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -1619653920, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    - {fileID: -2040667540, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.12
+  - name: Jump
+    sprites:
+    - {fileID: -1096790452, guid: d4060b2e36065e648b2f0ddb7177e56d, type: 3}
+    timeBetweenFrames: 0.5
+  solutions:
+  - dfsNames:
+    - Is Jumping
+    - Jump
+    - Is Walking
+    - Is Running
+    - Run
+    - Walk
+    - Idle
