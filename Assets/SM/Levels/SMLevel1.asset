@@ -15,9 +15,9 @@ MonoBehaviour:
   playerBehaviorIndex: 2
   blackboardFields:
   - name: Is Walking
-    value: 1
+    value: 0
   - name: Is Running
-    value: 1
+    value: 0
   animations:
   - name: Idle
     sprites:

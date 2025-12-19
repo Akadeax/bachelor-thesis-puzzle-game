@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +17,7 @@ public class TLevelHandler : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            
         }
         else
         {
@@ -24,6 +25,11 @@ public class TLevelHandler : MonoBehaviour
         }
     }
     #endregion
+
+    private void Start()
+    {
+        if (FindObjectOfType<SMTutorialHandler>() is null) DontDestroyOnLoad(gameObject);
+    }
 
     [SerializeField] private GameObject winOverlay;
     [SerializeField] private GameObject wrongOverlay;
@@ -110,7 +116,7 @@ public class TLevelHandler : MonoBehaviour
     {   
         finalWinOverlay.SetActive(true);
         yield return new WaitForSecondsRealtime(5f);
-        Application.OpenURL("https://bit.ly/grad-t");
+        Application.OpenURL("https://forms.gle/FL499Jvrh373Twsj9");
     }
 
     private void AdvanceLevel()

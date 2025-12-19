@@ -28,8 +28,20 @@ public class TConvertDisplay : MonoBehaviour
         _text.color = Color.white;
     }
 
+    private void Update()
+    {
+        if (TTutorialHandler.Instance is null) return;
+        _text.enabled = TTutorialHandler.Instance.CurrentStep?.convertible ?? true;
+    }
+
     private void OnMouseDown()
     {
+        if (TTutorialHandler.Instance is not null)
+        {
+            // we are in tutorial
+            if (!TTutorialHandler.Instance.CurrentStep!.convertible) return;
+        }
+        
         _node.ConvertNode();
     }
 }

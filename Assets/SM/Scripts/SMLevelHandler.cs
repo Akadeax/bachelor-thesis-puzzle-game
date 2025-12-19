@@ -141,6 +141,6 @@ public class SMLevelHandler : MonoBehaviour
     {   
         finalWinOverlay.SetActive(true);
         yield return new WaitForSecondsRealtime(5f);
-        Application.OpenURL("https://bit.ly/grad-fsm");
+        Application.OpenURL("https://forms.gle/Bsn1SYXwsyJLxjJH7");
     }
 }

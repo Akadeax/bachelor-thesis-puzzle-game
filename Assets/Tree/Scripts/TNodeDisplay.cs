@@ -55,6 +55,8 @@ public class TNodeDisplay : MonoBehaviour
     private bool isHovered;
     private void OnMouseEnter()
     {
+        if (!_node.Interactable) return;
+        
         isHovered = true;
         if (isLastResolved)
         {
@@ -74,6 +76,8 @@ public class TNodeDisplay : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (!_node.Interactable) return;
+        
         switch (_node.Node)
         {
             case TreeNodeCondition:

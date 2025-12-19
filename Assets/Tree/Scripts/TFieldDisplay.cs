@@ -13,8 +13,8 @@ public class TFieldDisplay : MonoBehaviour
     {
         _text = GetComponent<TextMeshPro>();
         
-        // if (SMTutorialHandler.Instance == null) return;
-        // gameObject.SetActive(SMTutorialHandler.Instance.CurrentStep?.blackboardVisible ?? true);
+        if (TTutorialHandler.Instance == null) return;
+        gameObject.SetActive(SMTutorialHandler.Instance.CurrentStep?.blackboardVisible ?? true);
     }
 
     private void Update()

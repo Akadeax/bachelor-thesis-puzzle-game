@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class SMTutorialStep
+public class TTutorialStep
 {
     [Header("Text")]
     [TextArea]
@@ -18,18 +18,13 @@ public class SMTutorialStep
     public bool darkBackground;
     public bool nodesVisible;
     public bool blackboardVisible;
-    public bool transitionsVisible;
+    public bool convertible;
     public int playerBehaviorIndex;
-
-    [Header("Elements")]
-    public bool keepPreviousElements = true;
-    public List<SMInitialNode> nodes = new();
-    public List<SMInitialTransition> transitions = new();
 }
 
-public class SMTutorialHandler : MonoBehaviour
+public class TTutorialHandler : MonoBehaviour
 {
-    public static SMTutorialHandler Instance { get; private set; }
+    public static TTutorialHandler Instance { get; private set; }
     
     private void Awake()
     {
@@ -51,18 +46,18 @@ public class SMTutorialHandler : MonoBehaviour
 
     [SerializeField] private Image darkBackground;
     [SerializeField] private TextMeshProUGUI displayText;
-    [SerializeField] private List<SMTutorialStep> steps = new();
+    [SerializeField] private List<TTutorialStep> steps = new();
 
     private int currentStepIndex = -1;
 
     [CanBeNull]
-    public SMTutorialStep CurrentStep => currentStepIndex == -1 ? null : steps[currentStepIndex];
+    public TTutorialStep CurrentStep => currentStepIndex == -1 ? null : steps[currentStepIndex];
 
     public void EnterNextStep()
     {
         if (currentStepIndex == steps.Count - 1)
         {
-            SceneManager.LoadScene("SMMainScene");
+            SceneManager.LoadScene("TMainScene");
             return;
         }
         
@@ -84,28 +79,18 @@ public class SMTutorialHandler : MonoBehaviour
         
         _blackboard.SetActive(CurrentStep.blackboardVisible);
         
-        if (!CurrentStep.keepPreviousElements)
-        {
-            SMHandler.Instance.Restart();
-            SMHandler.Instance.SpawnFromLevelData(CurrentStep.nodes, CurrentStep.transitions);
-            FindObjectOfType<SMPlayerAnimator>().behaviorIndex = CurrentStep.playerBehaviorIndex;
-            FindObjectOfType<SMPlayerAnimator>().Initialize();
-        }
+        FindObjectOfType<TPlayerAnimator>().behaviorIndex = CurrentStep.playerBehaviorIndex;
+        FindObjectOfType<TPlayerAnimator>().Initialize();
         
         displayText.text = CurrentStep.displayedText;
         darkBackground.enabled = CurrentStep.darkBackground;
         
-        foreach (SMNode node in FindObjectsOfType<SMNode>(true))
+        foreach (TNode node in FindObjectsOfType<TNode>(true))
         {
             node.gameObject.SetActive(CurrentStep.nodesVisible);
             node.Interactable = CurrentStep.interactable;
         }
-        foreach (SMTransition transition in FindObjectsOfType<SMTransition>(true))
-        {
-            transition.gameObject.SetActive(CurrentStep.transitionsVisible);
-            transition.Interactable = CurrentStep.interactable;
-        }
-        foreach (SMFieldDisplay blackboardField in FindObjectsOfType<SMFieldDisplay>(true))
+        foreach (TFieldDisplay blackboardField in FindObjectsOfType<TFieldDisplay>(true))
         {
             blackboardField.gameObject.SetActive(CurrentStep.blackboardVisible);
         }

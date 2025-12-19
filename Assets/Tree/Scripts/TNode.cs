@@ -11,6 +11,8 @@ public class TNode : MonoBehaviour
     [SerializeField] private Vector2 trueOffset = new(2, 2);
     [SerializeField] private Vector2 falseOffset = new(2, -2);
 
+    public bool Interactable { get; set; } = true;
+    
     private TreeNodeBase _initParent;
     
     private int _depth;

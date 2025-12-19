@@ -15,7 +15,7 @@ MonoBehaviour:
   playerBehaviorIndex: 4
   blackboardFields:
   - name: Is Walking
-    value: 1
+    value: 0
   - name: Is Running
     value: 0
   - name: Is Jumping
